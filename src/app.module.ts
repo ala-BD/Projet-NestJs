@@ -1,12 +1,19 @@
 import { Module } from '@nestjs/common';
-import { MoteurModule } from './moteur/moteur.module';
-import { GenerateurModule } from './generateur/generateur.module';
-import { PhareModule } from './phare/phare.module';
-import { AudioModule } from './audio/audio.module';
-import { VehiculeModule } from './vehicule/vehicule.module';
-
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './users/entities/user.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [MoteurModule, GenerateurModule, PhareModule, AudioModule, VehiculeModule],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'mongodb',
+      host: 'localhost',
+      port: 27017,
+      database: 'nestjs_db',
+      entities: [User],
+      synchronize: true,
+    }),
+    UsersModule,
+  ],
 })
 export class AppModule {}
