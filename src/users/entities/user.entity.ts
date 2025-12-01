@@ -34,26 +34,26 @@ export class User {
 
   @BeforeInsert()
   beforeInsert() {
-    this.logger.log(`BeforeInsert -> creating user with email: ${this.email}`);
+    Logger.log(`BeforeInsert -> creating user with email: ${this.email}`);
   }
 
   @AfterInsert()
   afterInsert() {
-    this.logger.log(`AfterInsert -> user created (email: ${this.email})`);
+    Logger.log(`AfterInsert -> user created (email: ${this.email})`);
   }
 
   @AfterUpdate()
   afterUpdate() {
-    this.logger.log(`AfterUpdate -> user updated (email: ${this.email})`);
+    Logger.log(`AfterUpdate -> user updated (email: ${this.email})`);
   }
 
   @BeforeRemove()
   beforeRemove() {
-    this.logger.warn(`BeforeRemove -> removing user with id: ${this.id}`);
+    Logger.warn(`BeforeRemove -> removing user with id: ${this.id}`);
   }
 
   @AfterLoad()
   afterLoad() {
-    this.logger.debug(`AfterLoad -> user loaded: ${this.email}`);
+    Logger.debug(`AfterLoad -> user loaded: ${this.email}`);
   }
 }
