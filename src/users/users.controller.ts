@@ -4,56 +4,60 @@ import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ActivateUserDto } from './dto/activate-user.dto';
+import { ObjectId } from 'mongodb';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // POST /users
+  //Create user
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return await this.usersService.create(createUserDto);
   }
 
-  // GET /users
+  //Get all users
   @Get()
   async findAll(): Promise<User[]> {
     return await this.usersService.findAll();
   }
 
-  // GET /users/email/:email  (route fixe avant :id)
+  //Find user by email
   @Get('email/:email')
   async findOneByEmail(@Param('email') email: string): Promise<User> {
     return await this.usersService.findOneByEmail(email);
   }
 
-  // GET /users/active  (route fixe avant :id)
+  //Get active users
   @Get('active')
   async findActive(): Promise<User[]> {
     return await this.usersService.findActive();
   }
 
-  // GET /users/:id
+  //Find user by ID
   @Get(':id')
-  async findOneById(@Param('id') id: string): Promise<User> {
+  async findOneById(@Param('id') id: ObjectId): Promise<User> {
     return await this.usersService.findOneById(id);
   }
 
-  // PUT /users/:id  -> update partiel
+  //Update user by ID
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<User> {
+  async update(
+    @Param('id') id: ObjectId,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<User> {
     return await this.usersService.update(id, updateUserDto);
   }
 
-  // PUT /users/activate  -> activer compte
+  //Activate user account
   @Put('activate')
   async activateAccount(@Body() activateUserDto: ActivateUserDto): Promise<User> {
     return await this.usersService.activateAccount(activateUserDto);
   }
 
-  // DELETE /users/:id
+  // Delete user by ID
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<void> {
+  async remove(@Param('id') id: ObjectId): Promise<void> {
     return await this.usersService.remove(id);
   }
 }
