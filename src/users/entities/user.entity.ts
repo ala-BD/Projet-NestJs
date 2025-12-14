@@ -1,59 +1,32 @@
-import {
-  Entity,
-  ObjectIdColumn,
-  Column,
-  BeforeInsert,
-  AfterInsert,
-  AfterUpdate,
-  BeforeRemove,
-  AfterLoad,
-} from 'typeorm';
-import { ObjectId } from 'mongodb';
-import { Logger } from '@nestjs/common';
-import { Exclude, Transform } from 'class-transformer';
+import { Entity, ObjectIdColumn, ObjectId, Column } from 'typeorm';
+import { IsString, IsEmail, IsBoolean, IsDate } from 'class-validator';
 
-@Entity('users')
+@Entity()
 export class User {
-  @Exclude() // on exclut le logger de la sérialisation
-  private readonly logger = new Logger(User.name);
-
-  // Transforme l'ObjectId en string lors de la sérialisation
   @ObjectIdColumn()
-  @Transform(({ value }) => value ? value.toHexString() : value, { toPlainOnly: true })
   id: ObjectId;
 
   @Column()
+  @IsEmail()
   email: string;
 
-  @Exclude() // cache le mot de passe dans la réponse JSON
   @Column()
+  @IsString()
   password: string;
 
   @Column({ default: false })
+  @IsBoolean()
   active: boolean;
 
-  @BeforeInsert()
-  beforeInsert() {
-    Logger.log(`BeforeInsert -> creating user with email: ${this.email}`);
-  }
+  @Column()
+  @IsString()
+  role: string;
 
-  @AfterInsert()
-  afterInsert() {
-    Logger.log(`AfterInsert -> user created (email: ${this.email})`);
-  }
+  @Column()
+  @IsDate()
+  createdAt: Date;
 
-  @AfterUpdate()
-  afterUpdate() {
-    Logger.log(`AfterUpdate -> user updated (email: ${this.email})`);
-  }
-
-  @BeforeRemove()
-  beforeRemove() {
-    Logger.warn(`BeforeRemove -> removing user with id: ${this.id}`);
-  }
-
-  @AfterLoad()
-  afterLoad() {
-    Logger.debug(`AfterLoad -> user loaded: ${this.email}`);
-  }
+  @Column()
+  @IsDate()
+  updatedAt: Date;
 }
